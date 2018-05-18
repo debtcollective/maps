@@ -1,9 +1,8 @@
-import React, { Component } from "react";
-import ReactMapGL from "react-map-gl";
-import config from "../config";
+import React from "react";
+import BaseMap from "./BaseMap";
 import { formatNumber } from "../utils";
 
-const Features = ({ feature }) => {
+const Features = feature => {
   let content = <p>Hover over a state!</p>;
 
   if (feature) {
@@ -36,60 +35,14 @@ const Features = ({ feature }) => {
   );
 };
 
-class TotalDebtMap extends Component {
-  // This is the id of the tileset in Mapbox
-  layerId = "debtbystate-8czcfj";
-  mapStyle = "mapbox://styles/orlandodelaguila/cjh9j9u7s08j52roznsij3cra";
-
-  state = {
-    viewport: {
-      width: window.innerWidth,
-      height: window.innerHeight,
-      latitude: 39.001025,
-      longitude: -97.324023,
-      zoom: 4.8
-    },
-    feature: null
-  };
-
-  componentDidMount() {
-    window.addEventListener("resize", () => {
-      this.updateDimensions();
-    });
-  }
-
-  updateDimensions() {
-    const viewport = {
-      ...this.state.viewport,
-      width: window.innerWidth,
-      height: window.innerHeight
-    };
-
-    this.setState({ viewport });
-  }
-
-  onHover({ features = [], lngLat }) {
-    const feature = features.filter(
-      feature => feature.layer.id === this.layerId
-    )[0];
-
-    this.setState({ feature });
-  }
-
-  render() {
-    return (
-      <div>
-        <ReactMapGL
-          {...config}
-          {...this.state.viewport}
-          mapStyle={this.mapStyle}
-          onViewportChange={viewport => this.setState({ viewport })}
-          onHover={event => this.onHover(event)}
-        />
-        <Features feature={this.state.feature} />
-      </div>
-    );
-  }
-}
+const TotalDebtMap = () => {
+  return (
+    <BaseMap
+      layerId="debtbystate-8czcfj"
+      mapStyle="mapbox://styles/orlandodelaguila/cjh9j9u7s08j52roznsij3cra"
+      features={Features}
+    />
+  );
+};
 
 export default TotalDebtMap;
