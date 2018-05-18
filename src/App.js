@@ -1,58 +1,51 @@
-import React, { Component } from "react";
-import ReactMapGL from "react-map-gl";
-import Features from "./components/Features";
-import config from "./config";
+import React from "react";
+import { Route, Link } from "react-router-dom";
+import {
+  TotalDebtMap,
+  AutoPerCapitaDebtMap,
+  CreditCardPerCapitaDebtMap,
+  MortagePerCapitaDebtMap,
+  StudentLoanPerCapitaDebtMap
+} from "./components";
 
-class App extends Component {
-  state = {
-    viewport: {
-      width: window.innerWidth,
-      height: window.innerHeight,
-      latitude: 39.001025,
-      longitude: -97.324023,
-      zoom: 4.8
-    },
-    feature: null
-  };
+const Index = () => (
+  <div>
+    <h1>Debt Maps</h1>
+    <ul>
+      <li>
+        <Link to="/total">Total</Link>
+      </li>
+      <li>
+        <Link to="/auto-per-capita">Auto Per Capita</Link>
+      </li>
+      <li>
+        <Link to="/credit-card-per-capita">Credit Card Per Capita</Link>
+      </li>
+      <li>
+        <Link to="/mortage-per-capita">Mortage Per Capita</Link>
+      </li>
+      <li>
+        <Link to="/student-loan-per-capita">Student Loan Per Capita</Link>
+      </li>
+    </ul>
+  </div>
+);
 
-  componentDidMount() {
-    window.addEventListener("resize", () => {
-      this.updateDimensions();
-    });
-  }
-
-  updateDimensions() {
-    const viewport = {
-      ...this.state.viewport,
-      width: window.innerWidth,
-      height: window.innerHeight
-    };
-
-    this.setState({ viewport });
-  }
-
-  onHover({ features = [], lngLat }) {
-    // This is the id of the tileset in Mapbox
-    const feature = features.filter(
-      feature => feature.layer.id === "debtbystate-8czcfj"
-    )[0];
-
-    this.setState({ feature });
-  }
-
-  render() {
-    return (
-      <div>
-        <ReactMapGL
-          {...config}
-          {...this.state.viewport}
-          onViewportChange={viewport => this.setState({ viewport })}
-          onHover={event => this.onHover(event)}
-        />
-        <Features feature={this.state.feature} />
-      </div>
-    );
-  }
-}
+const App = () => (
+  <div>
+    <Route exact path="/" component={Index} />
+    <Route path="/total" component={TotalDebtMap} />
+    <Route path="/auto-per-capita" component={AutoPerCapitaDebtMap} />
+    <Route
+      path="/credit-card-per-capita"
+      component={CreditCardPerCapitaDebtMap}
+    />
+    <Route path="/mortage-per-capita" component={MortagePerCapitaDebtMap} />
+    <Route
+      path="/student-loan-per-capita"
+      component={StudentLoanPerCapitaDebtMap}
+    />
+  </div>
+);
 
 export default App;
